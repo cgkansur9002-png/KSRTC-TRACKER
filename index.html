@@ -5,154 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KSRTC LIVE TRACKER</title>
     <style>
-        body { font-family: sans-serif; background: #f4f4f4; padding: 10px; margin: 0; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f4f4; padding: 10px; margin: 0; }
         .container { max-width: 900px; margin: auto; background: white; border-top: 10px solid #ce1d1d; padding: 15px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        
         .header { text-align: center; margin-bottom: 20px; }
         .title { color: #ce1d1d; font-size: 24px; font-weight: bold; margin: 0; }
-        .sub-times { font-size: 14px; color: #555; margin-top: 5px; }
-
-        table { width: 100%; border-collapse: collapse; }
-        th { background: #333; color: white; padding: 10px; font-size: 12px; position: sticky; top: 0; }
-        td { border-bottom: 1px solid #ddd; padding: 5px; text-align: center; }
-        
+        .sub-times { font-size: 14px; color: #555; margin-top: 5px; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { background: #333; color: white; padding: 12px; font-size: 12px; position: sticky; top: 0; }
+        td { border-bottom: 1px solid #ddd; padding: 8px; text-align: center; }
         input { width: 95%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; box-sizing: border-box; }
-        input:focus { background: #fffde7; outline: none; border-color: #ce1d1d; }
-
-        .status { font-weight: bold; padding: 8px; border-radius: 4px; background: #eee; font-size: 11px; display: block; min-height: 14px; }
-        
-        /* Auto-Update Colors */
-        .delayed { background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; }
-        .early { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
-        .ontime { background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd; }
-
-        .credit { text-align: center; margin-top: 30px; padding: 20px; font-size: 12px; color: #888; border-top: 1px solid #eee; font-weight: bold; }
-        .reset-link { color: #ce1d1d; cursor: pointer; text-decoration: underline; font-size: 12px; }
+        .status { font-weight: bold; padding: 8px; border-radius: 4px; background: #eee; font-size: 12px; display: block; min-height: 16px; border: 1px solid #ddd; }
+        .delayed { background: #fee2e2 !important; color: #dc2626 !important; border-color: #fca5a5 !important; }
+        .early { background: #dcfce7 !important; color: #166534 !important; border-color: #86efac !important; }
+        .ontime { background: #dbeafe !important; color: #1e40af !important; border-color: #93c5fd !important; }
+        .footer { text-align: center; margin-top: 30px; padding: 20px; font-size: 13px; color: #888; border-top: 1px solid #eee; font-weight: bold; }
     </style>
 </head>
-<body>
+<body onload="checkAll()">
 
 <div class="container">
     <div class="header">
         <div class="title">KSRTC: BENGALURU ➔ SIRSI</div>
         <div class="sub-times">DEP: 12:05 PM | ARR: 10:15 PM</div>
-        <p class="reset-link" onclick="window.location.reload()">Clear All Data</p>
     </div>
 
     <table>
         <thead>
             <tr>
-                <th style="width:30px">#</th>
+                <th style="width:40px">#</th>
                 <th>Place Name</th>
-                <th style="width:110px">Scheduled</th>
-                <th style="width:110px">Actual</th>
-                <th style="width:100px">Status</th>
+                <th style="width:120px">Scheduled</th>
+                <th style="width:120px">Actual</th>
+                <th style="width:110px">Status</th>
             </tr>
         </thead>
         <tbody>
-            <tr><td>1</td><td><input type="text" placeholder="Stop 1"value="BANGALORE"></td>
-            <td><input type="time" id="s1" oninput="check(1)"value="12:05"></td>
-            <td><input type="time" id="a1" oninput="check(1)"value="12:14"></td>
-            <td><span class="status" id="r1">-</span></td></tr>
-            <tr><td>2</td><td><input type="text" placeholder="Stop 2"value="NELAMANGALA"></td>
-            <td><input type="time" id="s2" oninput="check(2)"value="13:00"></td>
-            <td><input type="time" id="a2" oninput="check(2)"value="13:15"></td>
-            <td><span class="status" id="r2">-</span></td></tr>
-            <tr><td>3</td><td><input type="text" placeholder="Stop 3"value="DABASPET"></td>
-            <td><input type="time" id="s3" oninput="check(3)"value="13:30"></td>
-            <td><input type="time" id="a3" oninput="check(3)"value="13:42"></td>
-            <td><span class="status" id="r3">-</span></td></tr>
-            <tr><td>4</td><td><input type="text" placeholder="Stop 4"></td>
-            <td><input type="time" id="s4" oninput="check(4)"></td>
-            <td><input type="time" id="a4" oninput="check(4)"></td>
-            <td><span class="status" id="r4">-</span></td></tr>
-            <tr><td>5</td><td><input type="text" placeholder="Stop 5"></td>
-            <td><input type="time" id="s5" oninput="check(5)"></td>
-            <td><input type="time" id="a5" oninput="check(5)"></td>
-            <td><span class="status" id="r5">-</span></td></tr>
-            <tr><td>6</td><td><input type="text" placeholder="Stop 6"></td>
-            <td><input type="time" id="s6" oninput="check(6)"></td>
-            <td><input type="time" id="a6" oninput="check(6)"></td>
-            <td><span class="status" id="r6">-</span></td></tr>
-            <tr><td>7</td><td><input type="text" placeholder="Stop 7"></td>
-            <td><input type="time" id="s7" oninput="check(7)"></td>
-            <td><input type="time" id="a7" oninput="check(7)"></td>
-            <td><span class="status" id="r7">-</span></td></tr>
-            <tr><td>8</td><td><input type="text" placeholder="Stop 8"></td>
-            <td><input type="time" id="s8" oninput="check(8)"></td>
-            <td><input type="time" id="a8" oninput="check(8)"></td>
-            <td><span class="status" id="r8">-</span></td></tr>
-            <tr><td>9</td><td><input type="text" placeholder="Stop 9"></td>
-            <td><input type="time" id="s9" oninput="check(9)"></td>
-            <td><input type="time" id="a9" oninput="check(9)"></td>
-            <td><span class="status" id="r9">-</span></td></tr>
-            <tr><td>10</td><td><input type="text" placeholder="Stop 10"></td>
-            <td><input type="time" id="s10" oninput="check(10)"></td>
-            <td><input type="time" id="a10" oninput="check(10)"></td>
-            <td><span class="status" id="r10">-</span></td></tr>
-            <tr><td>11</td><td><input type="text"></td><td><input type="time" id="s11" oninput="check(11)"></td><td><input type="time" id="a11" oninput="check(11)"></td><td><span class="status" id="r11">-</span></td></tr>
-            <tr><td>12</td><td><input type="text"></td><td><input type="time" id="s12" oninput="check(12)"></td><td><input type="time" id="a12" oninput="check(12)"></td><td><span class="status" id="r12">-</span></td></tr>
-            <tr><td>13</td><td><input type="text"></td><td><input type="time" id="s13" oninput="check(13)"></td><td><input type="time" id="a13" oninput="check(13)"></td><td><span class="status" id="r13">-</span></td></tr>
-            <tr><td>14</td><td><input type="text"></td><td><input type="time" id="s14" oninput="check(14)"></td><td><input type="time" id="a14" oninput="check(14)"></td><td><span class="status" id="r14">-</span></td></tr>
-            <tr><td>15</td><td><input type="text"></td><td><input type="time" id="s15" oninput="check(15)"></td><td><input type="time" id="a15" oninput="check(15)"></td><td><span class="status" id="r15">-</span></td></tr>
-            <tr><td>16</td><td><input type="text"></td><td><input type="time" id="s16" oninput="check(16)"></td><td><input type="time" id="a16" oninput="check(16)"></td><td><span class="status" id="r16">-</span></td></tr>
-            <tr><td>17</td><td><input type="text"></td><td><input type="time" id="s17" oninput="check(17)"></td><td><input type="time" id="a17" oninput="check(17)"></td><td><span class="status" id="r17">-</span></td></tr>
-            <tr><td>18</td><td><input type="text"></td><td><input type="time" id="s18" oninput="check(18)"></td><td><input type="time" id="a18" oninput="check(18)"></td><td><span class="status" id="r18">-</span></td></tr>
-            <tr><td>19</td><td><input type="text"></td><td><input type="time" id="s19" oninput="check(19)"></td><td><input type="time" id="a19" oninput="check(19)"></td><td><span class="status" id="r19">-</span></td></tr>
-            <tr><td>20</td><td><input type="text"></td><td><input type="time" id="s20" oninput="check(20)"></td><td><input type="time" id="a20" oninput="check(20)"></td><td><span class="status" id="r20">-</span></td></tr>
-            <tr><td>21</td><td><input type="text"></td><td><input type="time" id="s21" oninput="check(21)"></td><td><input type="time" id="a21" oninput="check(21)"></td><td><span class="status" id="r21">-</span></td></tr>
-            <tr><td>22</td><td><input type="text"></td><td><input type="time" id="s22" oninput="check(22)"></td><td><input type="time" id="a22" oninput="check(22)"></td><td><span class="status" id="r22">-</span></td></tr>
-            <tr><td>23</td><td><input type="text"></td><td><input type="time" id="s23" oninput="check(23)"></td><td><input type="time" id="a23" oninput="check(23)"></td><td><span class="status" id="r23">-</span></td></tr>
-            <tr><td>24</td><td><input type="text"></td><td><input type="time" id="s24" oninput="check(24)"></td><td><input type="time" id="a24" oninput="check(24)"></td><td><span class="status" id="r24">-</span></td></tr>
-            <tr><td>25</td><td><input type="text"></td><td><input type="time" id="s25" oninput="check(25)"></td><td><input type="time" id="a25" oninput="check(25)"></td><td><span class="status" id="r25">-</span></td></tr>
-            <tr><td>26</td><td><input type="text"></td><td><input type="time" id="s26" oninput="check(26)"></td><td><input type="time" id="a26" oninput="check(26)"></td><td><span class="status" id="r26">-</span></td></tr>
-            <tr><td>27</td><td><input type="text"></td><td><input type="time" id="s27" oninput="check(27)"></td><td><input type="time" id="a27" oninput="check(27)"></td><td><span class="status" id="r27">-</span></td></tr>
-            <tr><td>28</td><td><input type="text"></td><td><input type="time" id="s28" oninput="check(28)"></td><td><input type="time" id="a28" oninput="check(28)"></td><td><span class="status" id="r28">-</span></td></tr>
-            <tr><td>29</td><td><input type="text"></td><td><input type="time" id="s29" oninput="check(29)"></td><td><input type="time" id="a29" oninput="check(29)"></td><td><span class="status" id="r29">-</span></td></tr>
-            <tr><td>30</td><td><input type="text"></td><td><input type="time" id="s30" oninput="check(30)"></td><td><input type="time" id="a30" oninput="check(30)"></td><td><span class="status" id="r30">-</span></td></tr>
-            <tr><td>31</td><td><input type="text"></td><td><input type="time" id="s31" oninput="check(31)"></td><td><input type="time" id="a31" oninput="check(31)"></td><td><span class="status" id="r31">-</span></td></tr>
-            <tr><td>32</td><td><input type="text"></td><td><input type="time" id="s32" oninput="check(32)"></td><td><input type="time" id="a32" oninput="check(32)"></td><td><span class="status" id="r32">-</span></td></tr>
-            <tr><td>33</td><td><input type="text"></td><td><input type="time" id="s33" oninput="check(33)"></td><td><input type="time" id="a33" oninput="check(33)"></td><td><span class="status" id="r33">-</span></td></tr>
-            <tr><td>34</td><td><input type="text"></td><td><input type="time" id="s34" oninput="check(34)"></td><td><input type="time" id="a34" oninput="check(34)"></td><td><span class="status" id="r34">-</span></td></tr>
-            <tr><td>35</td><td><input type="text"></td><td><input type="time" id="s35" oninput="check(35)"></td><td><input type="time" id="a35" oninput="check(35)"></td><td><span class="status" id="r35">-</span></td></tr>
-            <tr><td>36</td><td><input type="text"></td><td><input type="time" id="s36" oninput="check(36)"></td><td><input type="time" id="a36" oninput="check(36)"></td><td><span class="status" id="r36">-</span></td></tr>
-            <tr><td>37</td><td><input type="text"></td><td><input type="time" id="s37" oninput="check(37)"></td><td><input type="time" id="a37" oninput="check(37)"></td><td><span class="status" id="r37">-</span></td></tr>
-            <tr><td>38</td><td><input type="text"></td><td><input type="time" id="s38" oninput="check(38)"></td><td><input type="time" id="a38" oninput="check(38)"></td><td><span class="status" id="r38">-</span></td></tr>
-            <tr><td>39</td><td><input type="text"></td><td><input type="time" id="s39" oninput="check(39)"></td><td><input type="time" id="a39" oninput="check(39)"></td><td><span class="status" id="r39">-</span></td></tr>
-            <tr><td>40</td><td><input type="text"></td><td><input type="time" id="s40" oninput="check(40)"></td><td><input type="time" id="a40" oninput="check(40)"></td><td><span class="status" id="r40">-</span></td></tr>
+            <tr><td>1</td><td><input type="text" value="BANGALORE"></td><td><input type="time" id="s1" value="12:05"></td><td><input type="time" id="a1" value="12:14"></td><td><span class="status" id="r1">-</span></td></tr>
+            <tr><td>2</td><td><input type="text" value="NELAMANGALA"></td><td><input type="time" id="s2" value="13:00"></td><td><input type="time" id="a2" value="13:15"></td><td><span class="status" id="r2">-</span></td></tr>
+            <tr><td>3</td><td><input type="text" value="DABASPET"></td><td><input type="time" id="s3" value="13:30"></td><td><input type="time" id="a3" value="13:42"></td><td><span class="status" id="r3">-</span></td></tr>
+            <tr><td>4</td><td><input type="text" value="TUMKUR"></td><td><input type="time" id="s4" value="14:00"></td><td><input type="time" id="a4" value="14:14"></td><td><span class="status" id="r4">-</span></td></tr>
+            <tr><td>5</td><td><input type="text" value="GUBBI"></td><td><input type="time" id="s5" value="14:45"></td><td><input type="time" id="a5" value="14:58"></td><td><span class="status" id="r5">-</span></td></tr>
+            <tr><td>6</td><td><input type="text" value="K.B CROSS"></td><td><input type="time" id="s6" value="15:30"></td><td><input type="time" id="a6" value="15:32"></td><td><span class="status" id="r6">-</span></td></tr>
+            <tr><td>7</td><td><input type="text" value="TIPTUR"></td><td><input type="time" id="s7" value="16:00"></td><td><input type="time" id="a7" value="16:12"></td><td><span class="status" id="r7">-</span></td></tr>
+            <tr><td>8</td><td><input type="text" value="ARASIKERE"></td><td><input type="time" id="s8" value="16:35"></td><td><input type="time" id="a8" value="16:42"></td><td><span class="status" id="r8">-</span></td></tr>
+            <tr><td>9</td><td><input type="text" value="BANAVARA"></td><td><input type="time" id="s9" value="17:00"></td><td><input type="time" id="a9" value="17:08"></td><td><span class="status" id="r9">-</span></td></tr>
+            <tr><td>10</td><td><input type="text" value="KADUR"></td><td><input type="time" id="s10" value="17:25"></td><td><input type="time" id="a10" value="17:43"></td><td><span class="status" id="r10">-</span></td></tr>
+            <tr><td>11</td><td><input type="text" value="BIRUR"></td><td><input type="time" id="s11" value="17:45"></td><td><input type="time" id="a11" value="18:09"></td><td><span class="status" id="r11">-</span></td></tr>
+            
+            <tr><td>12</td><td><input type="text" value="TARIKERE"></td><td><input type="time" id="s12" value="18:20"></td><td><input type="time" id="a12"></td><td><span class="status" id="r12">-</span></td></tr>
+            <tr><td>13</td><td><input type="text" value="BHADRAVATHI"></td><td><input type="time" id="s13" value="19:00"></td><td><input type="time" id="a13"></td><td><span class="status" id="r13">-</span></td></tr>
+            <tr><td>14</td><td><input type="text" value="SHIVAMOGGA"></td><td><input type="time" id="s14" value="19:45"></td><td><input type="time" id="a14"></td><td><span class="status" id="r14">-</span></td></tr>
+            <tr><td>15</td><td><input type="text" value="AYANUR"></td><td><input type="time" id="s15" value="20:00"></td><td><input type="time" id="a15"></td><td><span class="status" id="r15">-</span></td></tr>
+            <tr><td>16</td><td><input type="text" value="ANANDAPURA"></td><td><input type="time" id="s16" value="20:20"></td><td><input type="time" id="a16"></td><td><span class="status" id="r16">-</span></td></tr>
+            <tr><td>17</td><td><input type="text" value="SAGAR"></td><td><input type="time" id="s17" value="20:50"></td><td><input type="time" id="a17"></td><td><span class="status" id="r17">-</span></td></tr>
+            <tr><td>18</td><td><input type="text" value="SIDDAPURA"></td><td><input type="time" id="s18" value="21:35"></td><td><input type="time" id="a18"></td><td><span class="status" id="r18">-</span></td></tr>
+            <tr><td>19</td><td><input type="text" value="NILEKANI"></td><td><input type="time" id="s19" value="22:05"></td><td><input type="time" id="a19"></td><td><span class="status" id="r19">-</span></td></tr>
+            <tr><td>20</td><td><input type="text" value="SIRSI [OLD BUS STAND]"></td><td><input type="time" id="s20" value="22:15"></td><td><input type="time" id="a20"></td><td><span class="status" id="r20">-</span></td></tr>
         </tbody>
     </table>
 
-    <div class="credit">MADE BY - CGKANSUR9002@GMAIL.COM</div>
+    <div class="footer">MADE BY - CGKANSUR9002@GMAIL.COM</div>
 </div>
 
 <script>
-    function check(i) {
-        var s = document.getElementById('s' + i).value;
-        var a = document.getElementById('a' + i).value;
-        var r = document.getElementById('r' + i);
-
-        if (s && a) {
-            var sMin = parseInt(s.split(':')[0]) * 60 + parseInt(s.split(':')[1]);
-            var aMin = parseInt(a.split(':')[0]) * 60 + parseInt(a.split(':')[1]);
-            var d = aMin - sMin;
-
-            r.className = "status";
-            if (d > 0) {
-                r.innerText = d + "m Late";
-                r.classList.add('delayed');
-            } else if (d < 0) {
-                r.innerText = Math.abs(d) + "m Early";
-                r.classList.add('early');
-            } else {
-                r.innerText = "On Time";
-                r.classList.add('ontime');
+    function checkAll() {
+        for (let i = 1; i <= 20; i++) {
+            var s = document.getElementById('s' + i).value;
+            var a = document.getElementById('a' + i).value;
+            var r = document.getElementById('r' + i);
+            if (s && a) {
+                var sMin = parseInt(s.split(':')[0]) * 60 + parseInt(s.split(':')[1]);
+                var aMin = parseInt(a.split(':')[0]) * 60 + parseInt(a.split(':')[1]);
+                var d = aMin - sMin;
+                r.className = "status";
+                if (d > 0) { r.innerText = d + "m Late"; r.classList.add('delayed'); }
+                else if (d < 0) { r.innerText = Math.abs(d) + "m Early"; r.classList.add('early'); }
+                else { r.innerText = "On Time"; r.classList.add('ontime'); }
             }
         }
     }
 </script>
-
 </body>
-
 </html>
 
