@@ -93,7 +93,7 @@
                 var aMin = parseInt(a.split(':')[0]) * 60 + parseInt(a.split(':')[1]);
                 var d = aMin - sMin;
                 r.className = "status";
-                if (d > 0) { r.innerText = "Delayed by " + d + " min"; r.classList.add('delayed'); }
+                if (d > 0) { r.innerText = "Delayed by " + d + "min"; r.classList.add('delayed'); }
                 else if (d < 0) { r.innerText = "Early by " + Math.abs(d) + " min"; r.classList.add('early'); }
                 else { r.innerText = "On Time"; r.classList.add('ontime'); }
             }
@@ -102,6 +102,7 @@
 </script>
 </body>
 </html>
+
 
 
 
