@@ -3,22 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KSRTC LIVE TRACKER</title>
+    <title>KSRTC LIVE</title>
     <style>
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f4f4; padding: 10px; margin: 0; }
-        .container { max-width: 900px; margin: auto; background: white; border-top: 10px solid #ce1d1d; padding: 15px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .header { text-align: center; margin-bottom: 20px; }
-        .title { color: #ce1d1d; font-size: 24px; font-weight: bold; margin: 0; }
-        .sub-times { font-size: 14px; color: #555; margin-top: 5px; font-weight: bold; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { background: #333; color: white; padding: 12px; font-size: 12px; position: sticky; top: 0; }
-        td { border-bottom: 1px solid #ddd; padding: 8px; text-align: center; }
-        input { width: 95%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 14px; box-sizing: border-box; }
-        .status { font-weight: bold; padding: 8px; border-radius: 4px; background: #eee; font-size: 12px; display: block; min-height: 16px; border: 1px solid #ddd; }
-        .delayed { background: #fee2e2 !important; color: #dc2626 !important; border-color: #fca5a5 !important; }
-        .early { background: #dcfce7 !important; color: #166534 !important; border-color: #86efac !important; }
-        .ontime { background: #dbeafe !important; color: #1e40af !important; border-color: #93c5fd !important; }
-        .footer { text-align: center; margin-top: 30px; padding: 20px; font-size: 13px; color: #888; border-top: 1px solid #eee; font-weight: bold; }
+        /* Compact Mobile Styling */
+        body { font-family: sans-serif; background: #f0f0f0; padding: 5px; margin: 0; }
+        .container { max-width: 100%; margin: auto; background: white; border-top: 6px solid #ce1d1d; padding: 10px; border-radius: 5px; }
+        .header { text-align: center; margin-bottom: 10px; }
+        .title { color: #ce1d1d; font-size: 18px; font-weight: bold; }
+        .sub-times { font-size: 11px; color: #555; }
+        
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        th { background: #333; color: white; padding: 6px; font-size: 10px; position: sticky; top: 0; }
+        td { border-bottom: 1px solid #ddd; padding: 4px; text-align: center; overflow: hidden; }
+        
+        /* Reduced Font Size for Inputs */
+        input { width: 100%; padding: 6px 2px; border: 1px solid #ccc; border-radius: 3px; font-size: 11px; box-sizing: border-box; }
+        
+        /* Status Box - Very Small for Mobile */
+        .status { font-weight: bold; padding: 4px 2px; border-radius: 3px; background: #eee; font-size: 9px; display: block; border: 1px solid #ddd; white-space: nowrap; }
+        .delayed { background: #fee2e2 !important; color: #dc2626 !important; }
+        .early { background: #dcfce7 !important; color: #166534 !important; }
+        .ontime { background: #dbeafe !important; color: #1e40af !important; }
+        
+        /* Column Widths */
+        .w-id { width: 20px; }
+        .w-place { width: 35%; }
+        .w-time { width: 22%; }
+        .w-status { width: 21%; }
+
+        .footer { text-align: center; margin-top: 15px; font-size: 10px; color: #888; font-weight: bold; }
     </style>
 </head>
 <body onload="checkAll()">
@@ -26,17 +39,17 @@
 <div class="container">
     <div class="header">
         <div class="title">KSRTC: BENGALURU ➔ SIRSI</div>
-        <div class="sub-times">DEP: 12:05 PM | ARR: 10:15 PM</div>
+        <div class="sub-times">12:05 PM | 10:15 PM</div>
     </div>
 
     <table>
         <thead>
             <tr>
-                <th style="width:40px">#</th>
-                <th>Place Name</th>
-                <th style="width:120px">Scheduled</th>
-                <th style="width:120px">Actual</th>
-                <th style="width:110px">Status</th>
+                <th class="w-id">#</th>
+                <th class="w-place">Place</th>
+                <th class="w-time">Sched.</th>
+                <th class="w-time">Actual</th>
+                <th class="w-status">Status</th>
             </tr>
         </thead>
         <tbody>
@@ -51,7 +64,6 @@
             <tr><td>9</td><td><input type="text" value="BANAVARA"></td><td><input type="time" id="s9" value="17:00"></td><td><input type="time" id="a9" value="17:08"></td><td><span class="status" id="r9">-</span></td></tr>
             <tr><td>10</td><td><input type="text" value="KADUR"></td><td><input type="time" id="s10" value="17:25"></td><td><input type="time" id="a10" value="17:43"></td><td><span class="status" id="r10">-</span></td></tr>
             <tr><td>11</td><td><input type="text" value="BIRUR"></td><td><input type="time" id="s11" value="17:45"></td><td><input type="time" id="a11" value="18:09"></td><td><span class="status" id="r11">-</span></td></tr>
-            
             <tr><td>12</td><td><input type="text" value="TARIKERE"></td><td><input type="time" id="s12" value="18:20"></td><td><input type="time" id="a12"></td><td><span class="status" id="r12">-</span></td></tr>
             <tr><td>13</td><td><input type="text" value="BHADRAVATHI"></td><td><input type="time" id="s13" value="19:00"></td><td><input type="time" id="a13"></td><td><span class="status" id="r13">-</span></td></tr>
             <tr><td>14</td><td><input type="text" value="SHIVAMOGGA"></td><td><input type="time" id="s14" value="19:45"></td><td><input type="time" id="a14"></td><td><span class="status" id="r14">-</span></td></tr>
@@ -60,7 +72,7 @@
             <tr><td>17</td><td><input type="text" value="SAGAR"></td><td><input type="time" id="s17" value="20:50"></td><td><input type="time" id="a17"></td><td><span class="status" id="r17">-</span></td></tr>
             <tr><td>18</td><td><input type="text" value="SIDDAPURA"></td><td><input type="time" id="s18" value="21:35"></td><td><input type="time" id="a18"></td><td><span class="status" id="r18">-</span></td></tr>
             <tr><td>19</td><td><input type="text" value="NILEKANI"></td><td><input type="time" id="s19" value="22:05"></td><td><input type="time" id="a19"></td><td><span class="status" id="r19">-</span></td></tr>
-            <tr><td>20</td><td><input type="text" value="SIRSI [OLD BUS STAND]"></td><td><input type="time" id="s20" value="22:15"></td><td><input type="time" id="a20"></td><td><span class="status" id="r20">-</span></td></tr>
+            <tr><td>20</td><td><input type="text" value="SIRSI [OLD]"></td><td><input type="time" id="s20" value="22:15"></td><td><input type="time" id="a20"></td><td><span class="status" id="r20">-</span></td></tr>
         </tbody>
     </table>
 
@@ -87,4 +99,5 @@
 </script>
 </body>
 </html>
+
 
