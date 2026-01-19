@@ -5,34 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KSRTC LIVE</title>
     <style>
-        body { font-family: -apple-system, sans-serif; background: #f0f2f5; padding: 5px; margin: 0; }
-        .container { max-width: 100%; margin: auto; background: white; border-top: 5px solid #ce1d1d; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        /* Compact Mobile Styling */
+        body { font-family: sans-serif; background: #f0f0f0; padding: 5px; margin: 0; }
+        .container { max-width: 100%; margin: auto; background: white; border-top: 6px solid #ce1d1d; padding: 10px; border-radius: 5px; }
+        .header { text-align: center; margin-bottom: 10px; }
+        .title { color: #ce1d1d; font-size: 18px; font-weight: bold; }
+        .sub-times { font-size: 11px; color: #555; }
         
-        .header { text-align: center; padding: 10px; background: white; border-bottom: 1px solid #eee; }
-        .title { color: #ce1d1d; font-size: 18px; font-weight: bold; margin: 0; }
-        .sub-times { font-size: 11px; color: #666; margin-top: 3px; }
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        th { background: #333; color: white; padding: 6px; font-size: 10px; position: sticky; top: 0; }
+        td { border-bottom: 1px solid #ddd; padding: 4px; text-align: center; overflow: hidden; }
         
-        /* Mobile List Layout */
-        .stop-row { display: flex; flex-direction: column; padding: 10px; border-bottom: 1px solid #eee; }
-        .stop-row:nth-child(even) { background: #fafafa; }
+        /* Reduced Font Size for Inputs */
+        input { width: 100%; padding: 6px 2px; border: 1px solid #ccc; border-radius: 3px; font-size: 11px; box-sizing: border-box; }
         
-        .row-top { display: flex; align-items: center; margin-bottom: 5px; }
-        .stop-num { font-size: 12px; font-weight: bold; color: #999; width: 25px; }
-        .place-input { flex-grow: 1; border: none; font-weight: bold; font-size: 14px; background: transparent; color: #333; pointer-events: none; }
+        /* Status Box - Very Small for Mobile */
+        .status { font-weight: bold; padding: 4px 2px; border-radius: 3px; background: #eee; font-size: 9px; display: block; border: 1px solid #ddd; white-space: nowrap; }
+        .delayed { background: #fee2e2 !important; color: #dc2626 !important; }
+        .early { background: #dcfce7 !important; color: #166534 !important; }
+        .ontime { background: #dbeafe !important; color: #1e40af !important; }
         
-        .row-bottom { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; align-items: center; }
-        
-        .time-group { display: flex; flex-direction: column; }
-        .label { font-size: 9px; color: #888; text-transform: uppercase; margin-bottom: 2px; }
-        
-        input[type="time"] { border: 1px solid #ddd; border-radius: 4px; padding: 5px; font-size: 12px; width: 100%; background: #fff; }
-        
-        .status { font-size: 11px; font-weight: bold; padding: 6px 2px; border-radius: 4px; text-align: center; border: 1px solid #ddd; background: #eee; }
-        .delayed { background: #fee2e2 !important; color: #dc2626 !important; border-color: #fca5a5 !important; }
-        .early { background: #dcfce7 !important; color: #166534 !important; border-color: #86efac !important; }
-        .ontime { background: #dbeafe !important; color: #1e40af !important; border-color: #93c5fd !important; }
+        /* Column Widths */
+        .w-id { width: 20px; }
+        .w-place { width: 35%; }
+        .w-time { width: 22%; }
+        .w-status { width: 21%; }
 
-        .footer { text-align: center; padding: 15px; font-size: 10px; color: #aaa; font-weight: bold; }
+        .footer { text-align: center; margin-top: 15px; font-size: 10px; color: #888; font-weight: bold; }
     </style>
 </head>
 <body onload="checkAll()">
@@ -40,39 +39,42 @@
 <div class="container">
     <div class="header">
         <div class="title">KSRTC: BENGALURU ➔ SIRSI</div>
-        <div class="sub-times">DEP: 12:05 PM | ARR: 10:15 PM</div>
+        <div class="sub-times">12:05 PM | 10:15 PM</div>
     </div>
 
-    <div id="stop-list">
-        <div class="stop-row">
-            <div class="row-top"><span class="stop-num">1</span><input class="place-input" value="BANGALORE"></div>
-            <div class="row-bottom">
-                <div class="time-group"><span class="label">Sched</span><input type="time" id="s1" value="12:05"></div>
-                <div class="time-group"><span class="label">Actual</span><input type="time" id="a1" value="12:14"></div>
-                <div class="status" id="r1">-</div>
-            </div>
-        </div>
-        <div class="stop-row"><div class="row-top"><span class="stop-num">2</span><input class="place-input" value="NELAMANGALA"></div><div class="row-bottom"><div class="time-group"><span class="label">Sched</span><input type="time" id="s2" value="13:00"></div><div class="time-group"><span class="label">Actual</span><input type="time" id="a2" value="13:15"></div><div class="status" id="r2">-</div></div></div>
-        <div class="stop-row"><div class="row-top"><span class="stop-num">3</span><input class="place-input" value="DABASPET"></div><div class="row-bottom"><div class="time-group"><span class="label">Sched</span><input type="time" id="s3" value="13:30"></div><div class="time-group"><span class="label">Actual</span><input type="time" id="a3" value="13:42"></div><div class="status" id="r3">-</div></div></div>
-        <div class="stop-row"><div class="row-top"><span class="stop-num">4</span><input class="place-input" value="TUMKUR"></div><div class="row-bottom"><div class="time-group"><span class="label">Sched</span><input type="time" id="s4" value="14:00"></div><div class="time-group"><span class="label">Actual</span><input type="time" id="a4" value="14:14"></div><div class="status" id="r4">-</div></div></div>
-        <div class="stop-row"><div class="row-top"><span class="stop-num">5</span><input class="place-input" value="GUBBI"></div><div class="row-bottom"><div class="time-group"><span class="label">Sched</span><input type="time" id="s5" value="14:45"></div><div class="time-group"><span class="label">Actual</span><input type="time" id="a5" value="14:58"></div><div class="status" id="r5">-</div></div></div>
-        <div class="stop-row"><div class="row-top"><span class="stop-num">6</span><input class="place-input" value="K.B CROSS"></div><div class="row-bottom"><div class="time-group"><span class="label">Sched</span><input type="time" id="s6" value="15:30"></div><div class="time-group"><span class="label">Actual</span><input type="time" id="a6" value="15:32"></div><div class="status" id="r6">-</div></div></div>
-        <div class="stop-row"><div class="row-top"><span class="stop-num">7</span><input class="place-input" value="TIPTUR"></div><div class="row-bottom"><div class="time-group"><span class="label">Sched</span><input type="time" id="s7" value="16:00"></div><div class="time-group"><span class="label">Actual</span><input type="time" id="a7" value="16:12"></div><div class="status" id="r7">-</div></div></div>
-        <div class="stop-row"><div class="row-top"><span class="stop-num">8</span><input class="place-input" value="ARASIKERE"></div><div class="row-bottom"><div class="time-group"><span class="label">Sched</span><input type="time" id="s8" value="16:35"></div><div class="time-group"><span class="label">Actual</span><input type="time" id="a8" value="16:42"></div><div class="status" id="r8">-</div></div></div>
-        <div class="stop-row"><div class="row-top"><span class="stop-num">9</span><input class="place-input" value="BANAVARA"></div><div class="row-bottom"><div class="time-group"><span class="label">Sched</span><input type="time" id="s9" value="17:00"></div><div class="time-group"><span class="label">Actual</span><input type="time" id="a9" value="17:08"></div><div class="status" id="r9">-</div></div></div>
-        <div class="stop-row"><div class="row-top"><span class="stop-num">10</span><input class="place-input" value="KADUR"></div><div class="row-bottom"><div class="time-group"><span class="label">Sched</span><input type="time" id="s10" value="17:25"></div><div class="time-group"><span class="label">Actual</span><input type="time" id="a10" value="17:43"></div><div class="status" id="r10">-</div></div></div>
-        <div class="stop-row"><div class="row-top"><span class="stop-num">11</span><input class="place-input" value="BIRUR"></div><div class="row-bottom"><div class="time-group"><span class="label">Sched</span><input type="time" id="s11" value="17:45"></div><div class="time-group"><span class="label">Actual</span><input type="time" id="a11" value="18:09"></div><div class="status" id="r11">-</div></div></div>
-        
-        <div class="stop-row"><div class="row-top"><span class="stop-num">12</span><input class="place-input" value="TARIKERE"></div><div class="row-bottom"><div class="time-group"><span class="label">Sched</span><input type="time" id="s12" value="18:20"></div><div class="time-group"><span class="label">Actual</span><input type="time" id="a12"></div><div class="status" id="r12">-</div></div></div>
-        <div class="stop-row"><div class="row-top"><span class="stop-num">13</span><input class="place-input" value="BHADRAVATHI"></div><div class="row-bottom"><div class="time-group"><span class="label">Sched</span><input type="time" id="s13" value="19:00"></div><div class="time-group"><span class="label">Actual</span><input type="time" id="a13"></div><div class="status" id="r13">-</div></div></div>
-        <div class="stop-row"><div class="row-top"><span class="stop-num">14</span><input class="place-input" value="SHIVAMOGGA"></div><div class="row-bottom"><div class="time-group"><span class="label">Sched</span><input type="time" id="s14" value="19:45"></div><div class="time-group"><span class="label">Actual</span><input type="time" id="a14"></div><div class="status" id="r14">-</div></div></div>
-        <div class="stop-row"><div class="row-top"><span class="stop-num">15</span><input class="place-input" value="AYANUR"></div><div class="row-bottom"><div class="time-group"><span class="label">Sched</span><input type="time" id="s15" value="20:00"></div><div class="time-group"><span class="label">Actual</span><input type="time" id="a15"></div><div class="status" id="r15">-</div></div></div>
-        <div class="stop-row"><div class="row-top"><span class="stop-num">16</span><input class="place-input" value="ANANDAPURA"></div><div class="row-bottom"><div class="time-group"><span class="label">Sched</span><input type="time" id="s16" value="20:20"></div><div class="time-group"><span class="label">Actual</span><input type="time" id="a16"></div><div class="status" id="r16">-</div></div></div>
-        <div class="stop-row"><div class="row-top"><span class="stop-num">17</span><input class="place-input" value="SAGAR"></div><div class="row-bottom"><div class="time-group"><span class="label">Sched</span><input type="time" id="s17" value="20:50"></div><div class="time-group"><span class="label">Actual</span><input type="time" id="a17"></div><div class="status" id="r17">-</div></div></div>
-        <div class="stop-row"><div class="row-top"><span class="stop-num">18</span><input class="place-input" value="SIDDAPURA"></div><div class="row-bottom"><div class="time-group"><span class="label">Sched</span><input type="time" id="s18" value="21:35"></div><div class="time-group"><span class="label">Actual</span><input type="time" id="a18"></div><div class="status" id="r18">-</div></div></div>
-        <div class="stop-row"><div class="row-top"><span class="stop-num">19</span><input class="place-input" value="NILEKANI"></div><div class="row-bottom"><div class="time-group"><span class="label">Sched</span><input type="time" id="s19" value="22:05"></div><div class="time-group"><span class="label">Actual</span><input type="time" id="a19"></div><div class="status" id="r19">-</div></div></div>
-        <div class="stop-row"><div class="row-top"><span class="stop-num">20</span><input class="place-input" value="SIRSI [OLD]"></div><div class="row-bottom"><div class="time-group"><span class="label">Sched</span><input type="time" id="s20" value="22:15"></div><div class="time-group"><span class="label">Actual</span><input type="time" id="a20"></div><div class="status" id="r20">-</div></div></div>
-    </div>
+    <table>
+        <thead>
+            <tr>
+                <th class="w-id">#</th>
+                <th class="w-place">Place</th>
+                <th class="w-time">Sched.</th>
+                <th class="w-time">Actual</th>
+                <th class="w-status">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>1</td><td><input type="text" value="BANGALORE"></td><td><input type="time" id="s1" value="12:05"></td><td><input type="time" id="a1" value="12:14"></td><td><span class="status" id="r1">-</span></td></tr>
+            <tr><td>2</td><td><input type="text" value="NELAMANGALA"></td><td><input type="time" id="s2" value="13:00"></td><td><input type="time" id="a2" value="13:15"></td><td><span class="status" id="r2">-</span></td></tr>
+            <tr><td>3</td><td><input type="text" value="DABASPET"></td><td><input type="time" id="s3" value="13:30"></td><td><input type="time" id="a3" value="13:42"></td><td><span class="status" id="r3">-</span></td></tr>
+            <tr><td>4</td><td><input type="text" value="TUMKUR"></td><td><input type="time" id="s4" value="14:00"></td><td><input type="time" id="a4" value="14:14"></td><td><span class="status" id="r4">-</span></td></tr>
+            <tr><td>5</td><td><input type="text" value="GUBBI"></td><td><input type="time" id="s5" value="14:45"></td><td><input type="time" id="a5" value="14:58"></td><td><span class="status" id="r5">-</span></td></tr>
+            <tr><td>6</td><td><input type="text" value="K.B CROSS"></td><td><input type="time" id="s6" value="15:30"></td><td><input type="time" id="a6" value="15:32"></td><td><span class="status" id="r6">-</span></td></tr>
+            <tr><td>7</td><td><input type="text" value="TIPTUR"></td><td><input type="time" id="s7" value="16:00"></td><td><input type="time" id="a7" value="16:12"></td><td><span class="status" id="r7">-</span></td></tr>
+            <tr><td>8</td><td><input type="text" value="ARASIKERE"></td><td><input type="time" id="s8" value="16:35"></td><td><input type="time" id="a8" value="16:42"></td><td><span class="status" id="r8">-</span></td></tr>
+            <tr><td>9</td><td><input type="text" value="BANAVARA"></td><td><input type="time" id="s9" value="17:00"></td><td><input type="time" id="a9" value="17:08"></td><td><span class="status" id="r9">-</span></td></tr>
+            <tr><td>10</td><td><input type="text" value="KADUR"></td><td><input type="time" id="s10" value="17:25"></td><td><input type="time" id="a10" value="17:43"></td><td><span class="status" id="r10">-</span></td></tr>
+            <tr><td>11</td><td><input type="text" value="BIRUR"></td><td><input type="time" id="s11" value="17:45"></td><td><input type="time" id="a11" value="18:09"></td><td><span class="status" id="r11">-</span></td></tr>
+            <tr><td>12</td><td><input type="text" value="TARIKERE"></td><td><input type="time" id="s12" value="18:20"></td><td><input type="time" id="a12"></td><td><span class="status" id="r12">-</span></td></tr>
+            <tr><td>13</td><td><input type="text" value="BHADRAVATHI"></td><td><input type="time" id="s13" value="19:00"></td><td><input type="time" id="a13"></td><td><span class="status" id="r13">-</span></td></tr>
+            <tr><td>14</td><td><input type="text" value="SHIVAMOGGA"></td><td><input type="time" id="s14" value="19:45"></td><td><input type="time" id="a14"></td><td><span class="status" id="r14">-</span></td></tr>
+            <tr><td>15</td><td><input type="text" value="AYANUR"></td><td><input type="time" id="s15" value="20:00"></td><td><input type="time" id="a15"></td><td><span class="status" id="r15">-</span></td></tr>
+            <tr><td>16</td><td><input type="text" value="ANANDAPURA"></td><td><input type="time" id="s16" value="20:20"></td><td><input type="time" id="a16"></td><td><span class="status" id="r16">-</span></td></tr>
+            <tr><td>17</td><td><input type="text" value="SAGAR"></td><td><input type="time" id="s17" value="20:50"></td><td><input type="time" id="a17"></td><td><span class="status" id="r17">-</span></td></tr>
+            <tr><td>18</td><td><input type="text" value="SIDDAPURA"></td><td><input type="time" id="s18" value="21:35"></td><td><input type="time" id="a18"></td><td><span class="status" id="r18">-</span></td></tr>
+            <tr><td>19</td><td><input type="text" value="NILEKANI"></td><td><input type="time" id="s19" value="22:05"></td><td><input type="time" id="a19"></td><td><span class="status" id="r19">-</span></td></tr>
+            <tr><td>20</td><td><input type="text" value="SIRSI [OLD]"></td><td><input type="time" id="s20" value="22:15"></td><td><input type="time" id="a20"></td><td><span class="status" id="r20">-</span></td></tr>
+        </tbody>
+    </table>
 
     <div class="footer">MADE BY - CGKANSUR9002@GMAIL.COM</div>
 </div>
@@ -97,5 +99,6 @@
 </script>
 </body>
 </html>
+
 
 
