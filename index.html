@@ -3,103 +3,271 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KSRTC LIVE</title>
+    <title>KSRTC PREMIUM TRACKER</title>
     <style>
-        /* Compact Mobile Styling */
-        body { font-family: sans-serif; background: #f0f0f0; padding: 5px; margin: 0; }
-        .container { max-width: 100%; margin: auto; background: white; border-top: 6px solid #ce1d1d; padding: 10px; border-radius: 5px; }
-        .header { text-align: center; margin-bottom: 10px; }
-        .title { color: #ce1d1d; font-size: 18px; font-weight: bold; }
-        .sub-times { font-size: 11px; color: #555; }
-        
-        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        th { background: #333; color: white; padding: 6px; font-size: 10px; position: sticky; top: 0; }
-        td { border-bottom: 1px solid #ddd; padding: 4px; text-align: center; overflow: hidden; }
-        
-        /* Reduced Font Size for Inputs */
-        input { width: 100%; padding: 6px 2px; border: 1px solid #ccc; border-radius: 3px; font-size: 11px; box-sizing: border-box; }
-        
-        /* Status Box - Very Small for Mobile */
-        .status { font-weight: bold; padding: 4px 2px; border-radius: 3px; background: #eee; font-size: 9px; display: block; border: 1px solid #ddd; white-space: nowrap; }
-        .delayed { background: #fee2e2 !important; color: #dc2626 !important; }
-        .early { background: #dcfce7 !important; color: #166534 !important; }
-        .ontime { background: #dbeafe !important; color: #1e40af !important; }
-        
-        /* Column Widths */
-        .w-id { width: 20px; }
-        .w-place { width: 35%; }
-        .w-time { width: 22%; }
-        .w-status { width: 21%; }
+        :root {
+            --ksrtc-red: #ce1d1d;
+            --glass: rgba(255, 255, 255, 0.9);
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
 
-        .footer { text-align: center; margin-top: 15px; font-size: 10px; color: #888; font-weight: bold; }
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background-attachment: fixed;
+            color: #333;
+        }
+
+        /* Splash Header with Heavy Graphics */
+        .splash-header {
+            background: linear-gradient(rgba(206, 29, 29, 0.9), rgba(150, 0, 0, 0.9)), 
+                        url('https://www.ksrtc.in/ksrtc-theme/images/ksrtc/slider/slider1.jpg'); /* Representative background */
+            background-size: cover;
+            background-position: center;
+            padding: 40px 20px;
+            color: white;
+            text-align: center;
+            border-bottom: 5px solid #ffcc00;
+            box-shadow: var(--shadow);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .logo-container img {
+            width: 100px;
+            height: auto;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
+            margin-bottom: 15px;
+        }
+
+        .route-banner {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: 2px;
+            margin: 10px 0;
+            text-transform: uppercase;
+        }
+
+        .timing-pill {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            padding: 8px 20px;
+            border-radius: 50px;
+            font-size: 14px;
+            border: 1px solid rgba(255,255,255,0.3);
+            margin-top: 10px;
+        }
+
+        /* Main Content Glassmorphism */
+        .container {
+            max-width: 800px;
+            margin: -30px auto 50px;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
+        .stop-card {
+            background: white;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            transition: transform 0.3s ease;
+            border-left: 5px solid var(--ksrtc-red);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .stop-card:hover {
+            transform: scale(1.02);
+        }
+
+        .stop-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .place-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #1a1a1a;
+        }
+
+        .stop-index {
+            background: var(--ksrtc-red);
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .time-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .time-box {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .time-label {
+            font-size: 10px;
+            color: #777;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        input[type="time"] {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 8px;
+            font-size: 14px;
+            background: #f9f9f9;
+            width: 100%;
+        }
+
+        .status {
+            padding: 10px 5px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            text-align: center;
+            background: #eee;
+            border: 1px solid #ddd;
+        }
+
+        .delayed { background: #fee2e2 !important; color: #dc2626 !important; border-color: #fca5a5 !important; }
+        .early { background: #dcfce7 !important; color: #166534 !important; border-color: #86efac !important; }
+        .ontime { background: #dbeafe !important; color: #1e40af !important; border-color: #93c5fd !important; }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            font-weight: bold;
+            color: #555;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 <body onload="checkAll()">
 
-<div class="container">
-    <div class="header">
-        <div class="title">KSRTC: BENGALURU ➔ SIRSI</div>
-        <div class="sub-times">12:05 PM | 10:15 PM</div>
+    <div class="splash-header">
+        <div class="logo-container">
+            <img src="https://upload.wikimedia.org/wikipedia/en/4/45/KSRTC_Logo.png" alt="KSRTC Logo">
+        </div>
+        <div class="route-banner">BENGALURU ➔ SIRSI</div>
+        <div class="timing-pill">DEP: 12:05 PM | ARR: 10:15 PM</div>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th class="w-id">#</th>
-                <th class="w-place">Place</th>
-                <th class="w-time">Sched.</th>
-                <th class="w-time">Actual</th>
-                <th class="w-status">Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr><td>1</td><td><input type="text" value="BANGALORE"></td><td><input type="time" id="s1" value="12:05"></td><td><input type="time" id="a1" value="12:14"></td><td><span class="status" id="r1">-</span></td></tr>
-            <tr><td>2</td><td><input type="text" value="NELAMANGALA"></td><td><input type="time" id="s2" value="13:00"></td><td><input type="time" id="a2" value="12:58"></td><td><span class="status" id="r2">-</span></td></tr>
-            <tr><td>3</td><td><input type="text" value="DABASPET"></td><td><input type="time" id="s3" value="13:30"></td><td><input type="time" id="a3" value="13:24"></td><td><span class="status" id="r3">-</span></td></tr>
-            <tr><td>4</td><td><input type="text" value="TUMKUR"></td><td><input type="time" id="s4" value="14:00"></td><td><input type="time" id="a4" value="14:06"></td><td><span class="status" id="r4">-</span></td></tr>
-            <tr><td>5</td><td><input type="text" value="GUBBI"></td><td><input type="time" id="s5" value="14:45"></td><td><input type="time" id="a5" value="14:38"></td><td><span class="status" id="r5">-</span></td></tr>
-            <tr><td>6</td><td><input type="text" value="K.B CROSS"></td><td><input type="time" id="s6" value="15:30"></td><td><input type="time" id="a6" value="15:17"></td><td><span class="status" id="r6">-</span></td></tr>
-            <tr><td>7</td><td><input type="text" value="TIPTUR"></td><td><input type="time" id="s7" value="16:00"></td><td><input type="time" id="a7" value="16:07"></td><td><span class="status" id="r7">-</span></td></tr>
-            <tr><td>8</td><td><input type="text" value="ARASIKERE"></td><td><input type="time" id="s8" value="16:35"></td><td><input type="time" id="a8" value="16:42"></td><td><span class="status" id="r8">-</span></td></tr>
-            <tr><td>9</td><td><input type="text" value="BANAVARA"></td><td><input type="time" id="s9" value="17:00"></td><td><input type="time" id="a9" value="17:08"></td><td><span class="status" id="r9">-</span></td></tr>
-            <tr><td>10</td><td><input type="text" value="KADUR"></td><td><input type="time" id="s10" value="17:25"></td><td><input type="time" id="a10" value="17:43"></td><td><span class="status" id="r10">-</span></td></tr>
-            <tr><td>11</td><td><input type="text" value="BIRUR"></td><td><input type="time" id="s11" value="17:45"></td><td><input type="time" id="a11" value="18:09"></td><td><span class="status" id="r11">-</span></td></tr>
-            <tr><td>12</td><td><input type="text" value="TARIKERE"></td><td><input type="time" id="s12" value="18:20"></td><td><input type="time" id="a12"value="18:56"></td><td><span class="status" id="r12">-</span></td></tr>
-            <tr><td>13</td><td><input type="text" value="BHADRAVATHI"></td><td><input type="time" id="s13" value="19:00"></td><td><input type="time" id="a13"value="19:30"></td><td><span class="status" id="r13">-</span></td></tr>
-            <tr><td>14</td><td><input type="text" value="SHIVAMOGGA"></td><td><input type="time" id="s14" value="19:45"></td><td><input type="time" id="a14"value="20:14"></td><td><span class="status" id="r14">-</span></td></tr>
-            <tr><td>15</td><td><input type="text" value="AYANUR"></td><td><input type="time" id="s15" value="20:00"></td><td><input type="time" id="a15"value="20:43"></td><td><span class="status" id="r15">-</span></td></tr>
-            <tr><td>16</td><td><input type="text" value="ANANDAPURA"></td><td><input type="time" id="s16" value="20:20"></td><td><input type="time" id="a16"value="21:17"></td><td><span class="status" id="r16">-</span></td></tr>
-            <tr><td>17</td><td><input type="text" value="SAGAR"></td><td><input type="time" id="s17" value="20:55"></td><td><input type="time" id="a17"value="21:51"></td><td><span class="status" id="r17">-</span></td></tr>
-            <tr><td>18</td><td><input type="text" value="TALGUPPA"></td><td><input type="time" id="s18" value="21:10"></td><td><input type="time" id="a18"value="22:09"></td><td><span class="status" id="r18">-</span></td></tr>
-            <tr><td>19</td><td><input type="text" value="SIDDAPURA"></td><td><input type="time" id="s19" value="21:35"></td><td><input type="time" id="a19"value="22:32"></td><td><span class="status" id="r19">-</span></td></tr>
-             <tr><td>20</td><td><input type="text" value="NIDGOD"></td><td><input type="time" id="s20" value="21:42"></td><td><input type="time" id="a20"value="22:40"></td><td><span class="status" id="r20">-</span></td></tr>
-             <tr><td>21</td><td><input type="text" value="KANSUR"></td><td><input type="time" id="s21" value="21:53"></td><td><input type="time" id="a21"value="23:10"></td><td><span class="status" id="r21">-</span></td></tr>
-            <tr><td>22</td><td><input type="text" value="NILEKANI"></td><td><input type="time" id="s22" value="22:05"></td><td><input type="time" id="a22"value="23:17"></td><td><span class="status" id="r22">-</span></td></tr>
-            <tr><td>23</td><td><input type="text" value="SIRSI [old bus-stand]"></td><td><input type="time" id="s23" value="22:15"></td><td><input type="time" id="a23"value="23:23"></td><td><span class="status" id="r23">-</span></td></tr>
-        </tbody>
-    </table>
+    <div class="container">
+        <div id="stop-list">
+            <script>
+                const stops = [
+                    {name: "BANGALORE", s: "12:05", a: "12:14"},
+                    {name: "NELAMANGALA", s: "13:00", a: "13:15"},
+                    {name: "DABASPET", s: "13:30", a: "13:42"},
+                    {name: "TUMKUR", s: "14:00", a: "14:14"},
+                    {name: "GUBBI", s: "14:45", a: "14:58"},
+                    {name: "K.B CROSS", s: "15:30", a: "15:32"},
+                    {name: "TIPTUR", s: "16:00", a: "16:12"},
+                    {name: "ARASIKERE", s: "16:35", a: "16:42"},
+                    {name: "BANAVARA", s: "17:00", a: "17:08"},
+                    {name: "KADUR", s: "17:25", a: "17:43"},
+                    {name: "BIRUR", s: "17:45", a: "18:09"},
+                    {name: "TARIKERE", s: "18:20", a: "18:56"},
+                    {name: "BHADRAVATHI", s: "19:00", a: "19:30"},
+                    {name: "SHIVAMOGGA", s: "19:45", a: "20:14"},
+                    {name: "AYANUR", s: "20:00", a: "20:43"},
+                    {name: "ANANDAPURA", s: "20:20", a: "21:17"},
+                    {name: "SAGAR", s: "20:50", a: "21:51"},
+		    {name: "TALGUPPA", s: "20:50", a: "22:09"},
+                    {name: "SIDDAPURA", s: "21:35", a: "22:32"},
+		    {name: "NIDGOD", s: "21:42", a: "22:40"},
+		    {name: "KANSUR", s: "21:53", a: "23:10"},
+                    {name: "NILEKANI", s: "22:05", a: "23:17"},
+                    {name: "SIRSI [OLD]", s: "22:15", a: "23:23"}
+                ];
 
-    <div class="footer">MADE BY - cgkansur9002@gmail.com</div>
-</div>
+                stops.forEach((stop, index) => {
+                    const i = index + 1;
+                    document.write(`
+                        <div class="stop-card">
+                            <div class="stop-info">
+                                <span class="place-name">${stop.name}</span>
+                                <span class="stop-index">${i}</span>
+                            </div>
+                            <div class="time-grid">
+                                <div class="time-box">
+                                    <span class="time-label">Scheduled</span>
+                                    <input type="time" id="s${i}" value="${stop.s}">
+                                </div>
+                                <div class="time-box">
+                                    <span class="time-label">Actual</span>
+                                    <input type="time" id="a${i}" value="${stop.a}" oninput="checkAll()">
+                                </div>
+                                <div class="status" id="r${i}">-</div>
+                            </div>
+                        </div>
+                    `);
+                });
+            </script>
+        </div>
+    </div>
 
-<script>
-    function checkAll() {
-        for (let i = 1; i <= 23; i++) {
-            var s = document.getElementById('s' + i).value;
-            var a = document.getElementById('a' + i).value;
-            var r = document.getElementById('r' + i);
-            if (s && a) {
-                var sMin = parseInt(s.split(':')[0]) * 60 + parseInt(s.split(':')[1]);
-                var aMin = parseInt(a.split(':')[0]) * 60 + parseInt(a.split(':')[1]);
-                var d = aMin - sMin;
-                r.className = "status";
-                if (d > 0) { r.innerText = "Delayed by " + d + "min"; r.classList.add('delayed'); }
-                else if (d < 0) { r.innerText = "Early by " + Math.abs(d) + " min"; r.classList.add('early'); }
-                else { r.innerText = "On Time"; r.classList.add('ontime'); }
+    <div class="footer">
+        PROJECT DESIGNED BY<br>
+        CGKANSUR9002@GMAIL.COM
+    </div>
+
+    <script>
+        function checkAll() {
+            for (let i = 1; i <= 23; i++) {
+                var sVal = document.getElementById('s' + i).value;
+                var aVal = document.getElementById('a' + i).value;
+                var r = document.getElementById('r' + i);
+                
+                if (sVal && aVal) {
+                    var sMin = parseInt(sVal.split(':')[0]) * 60 + parseInt(sVal.split(':')[1]);
+                    var aMin = parseInt(aVal.split(':')[0]) * 60 + parseInt(aVal.split(':')[1]);
+                    var d = aMin - sMin;
+
+                    r.className = "status";
+                    if (d > 0) {
+                        r.innerText = "DELAYED: " + d + "m";
+                        r.classList.add('delayed');
+                    } else if (d < 0) {
+                        r.innerText = "EARLY: " + Math.abs(d) + "m";
+                        r.classList.add('early');
+                    } else {
+                        r.innerText = "ON TIME";
+                        r.classList.add('ontime');
+                    }
+                }
             }
         }
-    }
-</script>
+    </script>
 </body>
 </html>
 
