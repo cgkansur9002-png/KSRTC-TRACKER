@@ -59,9 +59,21 @@
         /* --- STOP CARDS --- */
         .stop-entry { position: relative; margin-left: 75px; margin-bottom: 30px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; border-left: 4px solid #333; }
         .stop-entry.reached { border-left-color: var(--ksrtc-red); background: rgba(206, 29, 29, 0.15); }
-        .place-header { font-size: 18px; font-weight: bold; margin-bottom: 12px; color: #fff; }
+        .place-header { font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #fff; }
         
         .time-row { display: grid; grid-template-columns: 1fr 1fr 1.5fr; gap: 12px; align-items: end; }
+        
+        /* New Font for Headings */
+        .input-group label { 
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            font-size: 9px; /* Slightly smaller and cleaner */
+            color: #aaa; 
+            text-transform: uppercase; 
+            margin-bottom: 8px; 
+            font-weight: 600; 
+            letter-spacing: 0.8px;
+        }
+        
         input { background: #252525; border: 2px solid #444; color: white; padding: 8px; border-radius: 6px; font-size: 14px; width: 100%; box-sizing: border-box; }
 
         .status-pill { 
@@ -161,7 +173,6 @@
             let status = document.getElementById('r' + i);
             let pin = document.getElementById('pin' + i);
             
-            // Set Pin Position
             pin.style.top = (45 + (i-1) * spacing) + "px";
 
             if (aVal) {
@@ -211,6 +222,7 @@
 </script>
 </body>
 </html>
+
 
 
 
