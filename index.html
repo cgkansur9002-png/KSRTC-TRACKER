@@ -5,116 +5,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KSRTC PREMIUM LIVE</title>
     <style>
-        :root { --ksrtc-red: #ce1d1d; --gold: #ffcc00; }
+        :root { 
+            --ksrtc-red: #ce1d1d; 
+            --gold: #ffcc00; 
+            --low-delay: #4ade80;  /* Green */
+            --mid-delay: #fbbf24;  /* Yellow */
+            --high-delay: #ef4444; /* Red */
+        }
         body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #121212; color: white; padding-bottom: 50px; }
 
         /* --- CIRCULAR LOGO HEADER --- */
         .header { 
-            position: relative;
-            background: #000;
-            padding: 50px 20px; 
-            text-align: center; 
-            border-bottom: 3px solid var(--gold); 
-            overflow: hidden;
-            z-index: 1;
+            position: relative; background: #000; padding: 60px 20px; 
+            text-align: center; border-bottom: 3px solid var(--gold); overflow: hidden; z-index: 1;
         }
-
         .header::before {
-            content: "";
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 160px; height: 160px;
-            background: url('logo.png');
-            background-size: cover;
-            background-position: center;
-            border-radius: 50%;
-            opacity: 0.25;
-            border: 2px solid var(--gold);
-            z-index: -1;
+            content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 180px; height: 180px; background: url('logo.png'); background-size: cover;
+            border-radius: 50%; opacity: 0.25; border: 2px solid var(--gold); z-index: -1;
         }
 
         /* --- VISUAL TIMELINE --- */
         .timeline-container { position: relative; padding: 40px 10px; background: #1a1a1a; margin: 15px; border-radius: 15px; }
-        .road-line { position: absolute; left: 40px; top: 40px; bottom: 40px; width: 4px; background: #333; }
-        #progress-path { position: absolute; left: 40px; top: 40px; width: 4px; background: var(--ksrtc-red); transition: height 1s ease; height: 0; }
+        .road-line { position: absolute; left: 45px; top: 40px; bottom: 40px; width: 5px; background: #333; }
+        #progress-path { position: absolute; left: 45px; top: 40px; width: 5px; background: var(--ksrtc-red); transition: height 1s ease; height: 0; }
         
-        #bus-group { position: absolute; left: 22px; transition: top 1s ease; z-index: 100; top: 30px; display: flex; align-items: center; }
-        #bus-icon { width: 35px; filter: drop-shadow(0 0 5px white); }
+        /* Location Pins on Timeline */
+        .pin {
+            position: absolute; left: 41px; width: 14px; height: 14px;
+            background: #555; border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+            z-index: 50; transition: 0.5s; border: 1px solid #111;
+        }
+        .pin-glow { box-shadow: 0 0 15px currentColor; animation: pulse 1.5s infinite; }
+
+        @keyframes pulse {
+            0% { transform: rotate(-45deg) scale(1); opacity: 1; }
+            50% { transform: rotate(-45deg) scale(1.2); opacity: 0.7; }
+            100% { transform: rotate(-45deg) scale(1); opacity: 1; }
+        }
         
+        /* Bus Group */
+        #bus-group { position: absolute; left: 24px; transition: top 1s ease; z-index: 100; top: 30px; display: flex; align-items: center; }
+        #bus-icon { width: 45px; filter: drop-shadow(0 0 5px white); }
         #bus-bubble {
-            display: none;
-            background: var(--gold);
-            color: black;
-            padding: 5px 10px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: bold;
-            margin-left: 10px;
-            white-space: nowrap;
-            position: relative;
-            box-shadow: 0 0 10px rgba(255,204,0,0.5);
+            display: none; background: var(--gold); color: black; padding: 8px 12px; border-radius: 10px;
+            font-size: 13px; font-weight: bold; margin-left: 12px; white-space: nowrap; position: relative;
         }
         #bus-bubble::after {
-            content: "";
-            position: absolute;
-            left: -6px; top: 50%; transform: translateY(-50%);
-            border-top: 6px solid transparent; border-bottom: 6px solid transparent;
-            border-right: 8px solid var(--gold);
+            content: ""; position: absolute; left: -8px; top: 50%; transform: translateY(-50%);
+            border-top: 8px solid transparent; border-bottom: 8px solid transparent; border-right: 10px solid var(--gold);
         }
 
         /* --- STOP CARDS --- */
-        .stop-entry { position: relative; margin-left: 65px; margin-bottom: 25px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 10px; border-left: 3px solid #333; }
-        .stop-entry.reached { border-left-color: var(--ksrtc-red); background: rgba(206, 29, 29, 0.1); }
+        .stop-entry { position: relative; margin-left: 75px; margin-bottom: 30px; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; border-left: 4px solid #333; }
+        .stop-entry.reached { border-left-color: var(--ksrtc-red); background: rgba(206, 29, 29, 0.15); }
+        .place-header { font-size: 18px; font-weight: bold; margin-bottom: 12px; color: #fff; }
         
-        .place-header { font-size: 15px; font-weight: bold; margin-bottom: 10px; color: #eee; letter-spacing: 0.5px; }
-        
-        .time-row { display: grid; grid-template-columns: 0.8fr 0.8fr 1.4fr; gap: 8px; align-items: end; }
-        .input-group { display: flex; flex-direction: column; }
-        .input-group label { font-size: 8px; color: #888; text-transform: uppercase; margin-bottom: 4px; font-weight: bold; }
-        
-        input { 
-            background: #252525; border: 1px solid #444; color: white; padding: 5px; 
-            border-radius: 4px; font-size: 11px; width: 100%; box-sizing: border-box;
-        }
+        .time-row { display: grid; grid-template-columns: 1fr 1fr 1.5fr; gap: 12px; align-items: end; }
+        input { background: #252525; border: 2px solid #444; color: white; padding: 8px; border-radius: 6px; font-size: 14px; width: 100%; box-sizing: border-box; }
 
-        /* Status Pill */
         .status-pill { 
-            font-size: 11px; font-weight: 800; text-align: center; padding: 6px 2px;
-            border-radius: 5px; background: rgba(255,255,255,0.05);
-            display: flex; align-items: center; justify-content: center; gap: 4px;
-            white-space: nowrap;
+            font-size: 13px; font-weight: 900; text-align: center; padding: 10px 4px; border-radius: 6px;
+            background: rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: center; gap: 6px;
         }
-        .delayed { color: #ff5252; background: rgba(255,82,82,0.15); border: 1px solid rgba(255,82,82,0.3); } 
-        .early { color: #4ade80; background: rgba(74,222,128,0.15); border: 1px solid rgba(74,222,128,0.3); } 
-        .ontime { color: #60a5fa; background: rgba(96,165,250,0.15); border: 1px solid rgba(96,165,250,0.3); }
+        .color-green { color: var(--low-delay); border: 1.5px solid var(--low-delay); background: rgba(74,222,128,0.1); }
+        .color-yellow { color: var(--mid-delay); border: 1.5px solid var(--mid-delay); background: rgba(251,191,36,0.1); }
+        .color-red { color: var(--high-delay); border: 1.5px solid var(--high-delay); background: rgba(239,68,68,0.1); }
 
         #destination-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.98); z-index: 9999; flex-direction: column;
             justify-content: center; align-items: center; text-align: center; padding: 20px;
         }
-        .overlay-msg { color: var(--gold); font-size: 18px; font-weight: bold; line-height: 1.6; }
-
-        .footer { text-align: center; padding: 20px; font-size: 10px; opacity: 0.4; font-weight: bold; }
+        .final-logo { width: 130px; height: 130px; border-radius: 50%; border: 3px solid var(--gold); margin-bottom: 25px; box-shadow: 0 0 20px var(--gold); }
+        .overlay-msg { color: var(--gold); font-size: 20px; font-weight: bold; line-height: 1.4; max-width: 90%; }
+        .footer { text-align: center; padding: 30px; font-size: 11px; opacity: 0.5; font-weight: bold; }
     </style>
 </head>
 <body onload="renderTimeline()" onscroll="checkScroll()">
 
     <div id="destination-overlay">
-        <img src="logo.png" style="width: 100px; border-radius: 50%; border: 2px solid var(--gold); margin-bottom: 20px;">
+        <img src="logo.png" class="final-logo">
         <p class="overlay-msg">As the bus reached its final destination, you are no longer available to access the tracking...</p>
     </div>
 
     <div class="header">
-        <h2 style="margin:0; letter-spacing: 1.5px; font-size: 20px;">BENGALURU ➔ SIRSI</h2>
-        <p id="stats" style="font-size: 11px; color: var(--gold); margin-top: 8px;">GPS TRACKING ACTIVE</p>
+        <h2 style="margin:0; letter-spacing: 2px; font-size: 24px;">BENGALURU ➔ SIRSI</h2>
+        <p id="stats" style="font-size: 12px; color: var(--gold); margin-top: 10px; font-weight: bold;">LIVE TRACKING ACTIVE</p>
     </div>
 
     <div class="timeline-container">
         <div class="road-line"></div>
         <div id="progress-path"></div>
         
+        <div id="pin-layer"></div>
+
         <div id="bus-group">
             <img id="bus-icon" src="https://cdn-icons-png.flaticon.com/512/3448/3448339.png">
             <div id="bus-bubble">REACHED SIRSI BUS-DEPOT</div>
@@ -123,7 +108,7 @@
         <div id="timeline-content"></div>
     </div>
 
-    <div class="footer">MADE BY - CGKANSUR9002@GMAIL.COM</div>
+    <div class="footer">PROJECT DESIGNED BY CGKANSUR9002@GMAIL.COM</div>
 
 <script>
     const stops = [
@@ -144,10 +129,11 @@
     let journeyFinished = false;
 
     function renderTimeline() {
-        let html = '';
+        let cardHtml = '';
+        let pinHtml = '';
         stops.forEach((stop, index) => {
             const i = index + 1;
-            html += `
+            cardHtml += `
                 <div class="stop-entry" id="card${i}">
                     <div class="place-header">${stop.name}</div>
                     <div class="time-row">
@@ -155,76 +141,77 @@
                         <div class="input-group"><label>REACHED AT</label><input type="time" id="a${i}" value="${stop.a}" oninput="updateBus()"></div>
                         <div class="status-pill" id="r${i}">-</div>
                     </div>
-                </div>
-            `;
+                </div>`;
+            pinHtml += `<div class="pin" id="pin${i}"></div>`;
         });
-        document.getElementById('timeline-content').innerHTML = html;
+        document.getElementById('timeline-content').innerHTML = cardHtml;
+        document.getElementById('pin-layer').innerHTML = pinHtml;
         updateBus();
     }
 
     function updateBus() {
         let lastStop = 0;
         let totalStops = stops.length;
+        const roadHeight = document.getElementById('timeline-content').offsetHeight - 50;
+        const spacing = roadHeight / (totalStops - 1);
 
         for (let i = 1; i <= totalStops; i++) {
             let sVal = document.getElementById('s' + i).value;
             let aVal = document.getElementById('a' + i).value;
             let status = document.getElementById('r' + i);
-            let card = document.getElementById('card' + i);
+            let pin = document.getElementById('pin' + i);
+            
+            // Set Pin Position
+            pin.style.top = (45 + (i-1) * spacing) + "px";
 
             if (aVal) {
                 lastStop = i;
-                card.classList.add('reached');
+                document.getElementById('card' + i).classList.add('reached');
                 let sMin = parseInt(sVal.split(':')[0]) * 60 + parseInt(sVal.split(':')[1]);
                 let aMin = parseInt(aVal.split(':')[0]) * 60 + parseInt(aVal.split(':')[1]);
                 let d = aMin - sMin;
                 
                 status.className = "status-pill";
+                pin.className = "pin pin-glow";
+                
                 if (d > 0) { 
-                    status.classList.add('delayed');
+                    if (d <= 5) { status.classList.add('color-green'); pin.style.color = "var(--low-delay)"; pin.style.background = "var(--low-delay)"; }
+                    else if (d <= 30) { status.classList.add('color-yellow'); pin.style.color = "var(--mid-delay)"; pin.style.background = "var(--mid-delay)"; }
+                    else { status.classList.add('color-red'); pin.style.color = "var(--high-delay)"; pin.style.background = "var(--high-delay)"; }
+                    
                     if (d >= 60) {
                         let hrs = Math.floor(d / 60);
                         let mins = d % 60;
                         status.innerHTML = "🚨 DELAYED BY " + hrs + "h " + mins + "m";
-                    } else {
-                        status.innerHTML = "🚨 DELAYED BY " + d + "m";
-                    }
-                }
-                else if (d < 0) { 
-                    status.innerHTML = "🚀 RUNNING EARLY BY " + Math.abs(d) + "m"; 
-                    status.classList.add('early'); 
+                    } else { status.innerHTML = "🚨 DELAYED BY " + d + "m"; }
                 }
                 else { 
-                    status.innerHTML = "✅ ON TIME"; 
-                    status.classList.add('ontime'); 
+                    status.innerHTML = d < 0 ? "🚀 RUNNING EARLY BY " + Math.abs(d) + "m" : "✅ ON TIME"; 
+                    status.classList.add('color-green'); 
+                    pin.style.color = "var(--low-delay)"; pin.style.background = "var(--low-delay)";
                 }
             }
         }
 
-        const roadHeight = document.getElementById('timeline-content').offsetHeight - 50;
-        const spacing = roadHeight / (totalStops - 1);
         let busPosition = (lastStop - 1) * spacing;
-        
         if (lastStop === totalStops) {
             busPosition += 35;
             document.getElementById('bus-bubble').style.display = 'block';
             journeyFinished = true;
         }
-
         document.getElementById('bus-group').style.top = (40 + busPosition) + "px";
         document.getElementById('progress-path').style.height = busPosition + "px";
     }
 
     function checkScroll() {
-        if (journeyFinished) {
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 2) {
-                setTimeout(() => { document.getElementById('destination-overlay').style.display = 'flex'; }, 1000);
-            }
+        if (journeyFinished && (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 5) {
+            setTimeout(() => { document.getElementById('destination-overlay').style.display = 'flex'; }, 800);
         }
     }
 </script>
 </body>
 </html>
+
 
 
 
