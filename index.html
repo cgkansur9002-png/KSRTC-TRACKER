@@ -3,273 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KSRTC PREMIUM TRACKER</title>
+    <title>KSRTC PREMIUM LIVE</title>
     <style>
-        :root {
-            --ksrtc-red: #ce1d1d;
-            --glass: rgba(255, 255, 255, 0.9);
-            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        :root { --ksrtc-red: #ce1d1d; --gold: #ffcc00; }
+        body { margin: 0; font-family: 'Segoe UI', sans-serif; background: #121212; color: white; padding-bottom: 50px; }
+
+        /* --- CIRCULAR LOGO HEADER --- */
+        .header { 
+            position: relative;
+            background: #000;
+            padding: 50px 20px; 
+            text-align: center; 
+            border-bottom: 3px solid var(--gold); 
+            overflow: hidden;
+            z-index: 1;
         }
 
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            background-attachment: fixed;
-            color: #333;
-        }
-
-        /* Splash Header with Heavy Graphics */
-        .splash-header {
-            background: linear-gradient(rgba(206, 29, 29, 0.9), rgba(150, 0, 0, 0.9)), 
-                        url('https://www.ksrtc.in/ksrtc-theme/images/ksrtc/slider/slider1.jpg'); /* Representative background */
+        .header::before {
+            content: "";
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 160px; height: 160px;
+            background: url('logo.png');
             background-size: cover;
             background-position: center;
-            padding: 40px 20px;
-            color: white;
-            text-align: center;
-            border-bottom: 5px solid #ffcc00;
-            box-shadow: var(--shadow);
-            animation: fadeInDown 1s ease-out;
-        }
-
-        .logo-container img {
-            width: 100px;
-            height: auto;
-            filter: drop-shadow(0 0 10px rgba(255,255,255,0.5));
-            margin-bottom: 15px;
-        }
-
-        .route-banner {
-            font-size: 28px;
-            font-weight: 900;
-            letter-spacing: 2px;
-            margin: 10px 0;
-            text-transform: uppercase;
-        }
-
-        .timing-pill {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(5px);
-            padding: 8px 20px;
-            border-radius: 50px;
-            font-size: 14px;
-            border: 1px solid rgba(255,255,255,0.3);
-            margin-top: 10px;
-        }
-
-        /* Main Content Glassmorphism */
-        .container {
-            max-width: 800px;
-            margin: -30px auto 50px;
-            background: var(--glass);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-        }
-
-        .stop-card {
-            background: white;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            transition: transform 0.3s ease;
-            border-left: 5px solid var(--ksrtc-red);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-        }
-
-        .stop-card:hover {
-            transform: scale(1.02);
-        }
-
-        .stop-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .place-name {
-            font-size: 18px;
-            font-weight: bold;
-            color: #1a1a1a;
-        }
-
-        .stop-index {
-            background: var(--ksrtc-red);
-            color: white;
-            width: 25px;
-            height: 25px;
             border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 12px;
-            font-weight: bold;
+            opacity: 0.25;
+            border: 2px solid var(--gold);
+            z-index: -1;
         }
 
-        .time-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .time-box {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .time-label {
-            font-size: 10px;
-            color: #777;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-
-        input[type="time"] {
-            border: 1px solid #ddd;
+        /* --- VISUAL TIMELINE --- */
+        .timeline-container { position: relative; padding: 40px 10px; background: #1a1a1a; margin: 15px; border-radius: 15px; }
+        .road-line { position: absolute; left: 40px; top: 40px; bottom: 40px; width: 4px; background: #333; }
+        #progress-path { position: absolute; left: 40px; top: 40px; width: 4px; background: var(--ksrtc-red); transition: height 1s ease; height: 0; }
+        
+        #bus-group { position: absolute; left: 22px; transition: top 1s ease; z-index: 100; top: 30px; display: flex; align-items: center; }
+        #bus-icon { width: 35px; filter: drop-shadow(0 0 5px white); }
+        
+        #bus-bubble {
+            display: none;
+            background: var(--gold);
+            color: black;
+            padding: 5px 10px;
             border-radius: 8px;
-            padding: 8px;
-            font-size: 14px;
-            background: #f9f9f9;
-            width: 100%;
-        }
-
-        .status {
-            padding: 10px 5px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 800;
-            text-align: center;
-            background: #eee;
-            border: 1px solid #ddd;
-        }
-
-        .delayed { background: #fee2e2 !important; color: #dc2626 !important; border-color: #fca5a5 !important; }
-        .early { background: #dcfce7 !important; color: #166534 !important; border-color: #86efac !important; }
-        .ontime { background: #dbeafe !important; color: #1e40af !important; border-color: #93c5fd !important; }
-
-        .footer {
-            text-align: center;
-            padding: 30px;
+            font-size: 11px;
             font-weight: bold;
-            color: #555;
-            font-size: 12px;
-            letter-spacing: 1px;
+            margin-left: 10px;
+            white-space: nowrap;
+            position: relative;
+            box-shadow: 0 0 10px rgba(255,204,0,0.5);
+        }
+        #bus-bubble::after {
+            content: "";
+            position: absolute;
+            left: -6px; top: 50%; transform: translateY(-50%);
+            border-top: 6px solid transparent; border-bottom: 6px solid transparent;
+            border-right: 8px solid var(--gold);
         }
 
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* --- STOP CARDS --- */
+        .stop-entry { position: relative; margin-left: 65px; margin-bottom: 25px; background: rgba(255,255,255,0.03); padding: 12px; border-radius: 10px; border-left: 3px solid #333; }
+        .stop-entry.reached { border-left-color: var(--ksrtc-red); background: rgba(206, 29, 29, 0.1); }
+        
+        .place-header { font-size: 15px; font-weight: bold; margin-bottom: 10px; color: #eee; letter-spacing: 0.5px; }
+        
+        .time-row { display: grid; grid-template-columns: 0.8fr 0.8fr 1.4fr; gap: 8px; align-items: end; }
+        .input-group { display: flex; flex-direction: column; }
+        .input-group label { font-size: 8px; color: #888; text-transform: uppercase; margin-bottom: 4px; font-weight: bold; }
+        
+        input { 
+            background: #252525; border: 1px solid #444; color: white; padding: 5px; 
+            border-radius: 4px; font-size: 11px; width: 100%; box-sizing: border-box;
         }
+
+        /* Status Pill */
+        .status-pill { 
+            font-size: 11px; font-weight: 800; text-align: center; padding: 6px 2px;
+            border-radius: 5px; background: rgba(255,255,255,0.05);
+            display: flex; align-items: center; justify-content: center; gap: 4px;
+            white-space: nowrap;
+        }
+        .delayed { color: #ff5252; background: rgba(255,82,82,0.15); border: 1px solid rgba(255,82,82,0.3); } 
+        .early { color: #4ade80; background: rgba(74,222,128,0.15); border: 1px solid rgba(74,222,128,0.3); } 
+        .ontime { color: #60a5fa; background: rgba(96,165,250,0.15); border: 1px solid rgba(96,165,250,0.3); }
+
+        #destination-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.98); z-index: 9999; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center; padding: 20px;
+        }
+        .overlay-msg { color: var(--gold); font-size: 18px; font-weight: bold; line-height: 1.6; }
+
+        .footer { text-align: center; padding: 20px; font-size: 10px; opacity: 0.4; font-weight: bold; }
     </style>
 </head>
-<body onload="checkAll()">
+<body onload="renderTimeline()" onscroll="checkScroll()">
 
-    <div class="splash-header">
-        <div class="logo-container">
-            <img src="https://upload.wikimedia.org/wikipedia/en/4/45/KSRTC_Logo.png" alt="KSRTC Logo">
+    <div id="destination-overlay">
+        <img src="logo.png" style="width: 100px; border-radius: 50%; border: 2px solid var(--gold); margin-bottom: 20px;">
+        <p class="overlay-msg">As the bus reached its final destination, you are no longer available to access the tracking...</p>
+    </div>
+
+    <div class="header">
+        <h2 style="margin:0; letter-spacing: 1.5px; font-size: 20px;">BENGALURU ➔ SIRSI</h2>
+        <p id="stats" style="font-size: 11px; color: var(--gold); margin-top: 8px;">GPS TRACKING ACTIVE</p>
+    </div>
+
+    <div class="timeline-container">
+        <div class="road-line"></div>
+        <div id="progress-path"></div>
+        
+        <div id="bus-group">
+            <img id="bus-icon" src="https://cdn-icons-png.flaticon.com/512/3448/3448339.png">
+            <div id="bus-bubble">REACHED SIRSI BUS-DEPOT</div>
         </div>
-        <div class="route-banner">BENGALURU ➔ SIRSI</div>
-        <div class="timing-pill">DEP: 12:05 PM | ARR: 10:15 PM</div>
+
+        <div id="timeline-content"></div>
     </div>
 
-    <div class="container">
-        <div id="stop-list">
-            <script>
-                const stops = [
-                    {name: "BANGALORE", s: "12:05", a: "12:14"},
-                    {name: "NELAMANGALA", s: "13:00", a: "13:15"},
-                    {name: "DABASPET", s: "13:30", a: "13:42"},
-                    {name: "TUMKUR", s: "14:00", a: "14:14"},
-                    {name: "GUBBI", s: "14:45", a: "14:58"},
-                    {name: "K.B CROSS", s: "15:30", a: "15:32"},
-                    {name: "TIPTUR", s: "16:00", a: "16:12"},
-                    {name: "ARASIKERE", s: "16:35", a: "16:42"},
-                    {name: "BANAVARA", s: "17:00", a: "17:08"},
-                    {name: "KADUR", s: "17:25", a: "17:43"},
-                    {name: "BIRUR", s: "17:45", a: "18:09"},
-                    {name: "TARIKERE", s: "18:20", a: "18:56"},
-                    {name: "BHADRAVATHI", s: "19:00", a: "19:30"},
-                    {name: "SHIVAMOGGA", s: "19:45", a: "20:14"},
-                    {name: "AYANUR", s: "20:00", a: "20:43"},
-                    {name: "ANANDAPURA", s: "20:20", a: "21:17"},
-                    {name: "SAGAR", s: "20:50", a: "21:51"},
-		    {name: "TALGUPPA", s: "20:50", a: "22:09"},
-                    {name: "SIDDAPURA", s: "21:35", a: "22:32"},
-		    {name: "NIDGOD", s: "21:42", a: "22:40"},
-		    {name: "KANSUR", s: "21:53", a: "23:10"},
-                    {name: "NILEKANI", s: "22:05", a: "23:17"},
-                    {name: "SIRSI [OLD]", s: "22:15", a: "23:23"}
-                ];
+    <div class="footer">MADE BY - CGKANSUR9002@GMAIL.COM</div>
 
-                stops.forEach((stop, index) => {
-                    const i = index + 1;
-                    document.write(`
-                        <div class="stop-card">
-                            <div class="stop-info">
-                                <span class="place-name">${stop.name}</span>
-                                <span class="stop-index">${i}</span>
-                            </div>
-                            <div class="time-grid">
-                                <div class="time-box">
-                                    <span class="time-label">Scheduled</span>
-                                    <input type="time" id="s${i}" value="${stop.s}">
-                                </div>
-                                <div class="time-box">
-                                    <span class="time-label">Actual</span>
-                                    <input type="time" id="a${i}" value="${stop.a}" oninput="checkAll()">
-                                </div>
-                                <div class="status" id="r${i}">-</div>
-                            </div>
-                        </div>
-                    `);
-                });
-            </script>
-        </div>
-    </div>
+<script>
+    const stops = [
+        {name: "BANGALORE", s: "12:05", a: "12:14"}, {name: "NELAMANGALA", s: "13:00", a: "12:58"},
+        {name: "DABASPET", s: "13:30", a: "13:24"}, {name: "TUMKUR", s: "14:00", a: "14:06"},
+        {name: "GUBBI", s: "14:45", a: "14:38"}, {name: "K.B CROSS", s: "15:30", a: "15:17"},
+        {name: "TIPTUR", s: "16:00", a: "16:07"}, {name: "ARASIKERE", s: "16:35", a: "16:42"},
+        {name: "BANAVARA", s: "17:00", a: "17:08"}, {name: "KADUR", s: "17:25", a: "17:43"},
+        {name: "BIRUR", s: "17:45", a: "18:09"}, {name: "TARIKERE", s: "18:20", a: "18:56"},
+        {name: "BHADRAVATHI", s: "19:00", a: "19:30"}, {name: "SHIVAMOGGA", s: "19:45", a: "20:14"},
+        {name: "AYANUR", s: "20:00", a: "20:43"}, {name: "ANANDAPURA", s: "20:20", a: "21:17"},
+        {name: "SAGAR", s: "20:55", a: "21:51"}, {name: "TALGUPPA", s: "21:10", a: "22:09"},
+        {name: "SIDDAPURA", s: "21:35", a: "22:32"}, {name: "NIDGOD", s: "21:42", a: "22:48"},
+        {name: "KANSUR", s: "21:53", a: "23:10"}, {name: "NILEKANI", s: "22:05", a: "23:17"},
+        {name: "SIRSI [OLD BUS STAND]", s: "22:15", a: "23:23"}
+    ];
 
-    <div class="footer">
-        PROJECT DESIGNED BY<br>
-        CGKANSUR9002@GMAIL.COM
-    </div>
+    let journeyFinished = false;
 
-    <script>
-        function checkAll() {
-            for (let i = 1; i <= 23; i++) {
-                var sVal = document.getElementById('s' + i).value;
-                var aVal = document.getElementById('a' + i).value;
-                var r = document.getElementById('r' + i);
+    function renderTimeline() {
+        let html = '';
+        stops.forEach((stop, index) => {
+            const i = index + 1;
+            html += `
+                <div class="stop-entry" id="card${i}">
+                    <div class="place-header">${stop.name}</div>
+                    <div class="time-row">
+                        <div class="input-group"><label>SCHEDULED TIMING</label><input type="time" id="s${i}" value="${stop.s}"></div>
+                        <div class="input-group"><label>REACHED AT</label><input type="time" id="a${i}" value="${stop.a}" oninput="updateBus()"></div>
+                        <div class="status-pill" id="r${i}">-</div>
+                    </div>
+                </div>
+            `;
+        });
+        document.getElementById('timeline-content').innerHTML = html;
+        updateBus();
+    }
+
+    function updateBus() {
+        let lastStop = 0;
+        let totalStops = stops.length;
+
+        for (let i = 1; i <= totalStops; i++) {
+            let sVal = document.getElementById('s' + i).value;
+            let aVal = document.getElementById('a' + i).value;
+            let status = document.getElementById('r' + i);
+            let card = document.getElementById('card' + i);
+
+            if (aVal) {
+                lastStop = i;
+                card.classList.add('reached');
+                let sMin = parseInt(sVal.split(':')[0]) * 60 + parseInt(sVal.split(':')[1]);
+                let aMin = parseInt(aVal.split(':')[0]) * 60 + parseInt(aVal.split(':')[1]);
+                let d = aMin - sMin;
                 
-                if (sVal && aVal) {
-                    var sMin = parseInt(sVal.split(':')[0]) * 60 + parseInt(sVal.split(':')[1]);
-                    var aMin = parseInt(aVal.split(':')[0]) * 60 + parseInt(aVal.split(':')[1]);
-                    var d = aMin - sMin;
-
-                    r.className = "status";
-                    if (d > 0) {
-                        r.innerText = "DELAYED: " + d + "m";
-                        r.classList.add('delayed');
-                    } else if (d < 0) {
-                        r.innerText = "EARLY: " + Math.abs(d) + "m";
-                        r.classList.add('early');
+                status.className = "status-pill";
+                if (d > 0) { 
+                    status.classList.add('delayed');
+                    if (d >= 60) {
+                        let hrs = Math.floor(d / 60);
+                        let mins = d % 60;
+                        status.innerHTML = "🚨 DELAYED BY " + hrs + "h " + mins + "m";
                     } else {
-                        r.innerText = "ON TIME";
-                        r.classList.add('ontime');
+                        status.innerHTML = "🚨 DELAYED BY " + d + "m";
                     }
+                }
+                else if (d < 0) { 
+                    status.innerHTML = "🚀 RUNNING EARLY BY " + Math.abs(d) + "m"; 
+                    status.classList.add('early'); 
+                }
+                else { 
+                    status.innerHTML = "✅ ON TIME"; 
+                    status.classList.add('ontime'); 
                 }
             }
         }
-    </script>
+
+        const roadHeight = document.getElementById('timeline-content').offsetHeight - 50;
+        const spacing = roadHeight / (totalStops - 1);
+        let busPosition = (lastStop - 1) * spacing;
+        
+        if (lastStop === totalStops) {
+            busPosition += 35;
+            document.getElementById('bus-bubble').style.display = 'block';
+            journeyFinished = true;
+        }
+
+        document.getElementById('bus-group').style.top = (40 + busPosition) + "px";
+        document.getElementById('progress-path').style.height = busPosition + "px";
+    }
+
+    function checkScroll() {
+        if (journeyFinished) {
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 2) {
+                setTimeout(() => { document.getElementById('destination-overlay').style.display = 'flex'; }, 1000);
+            }
+        }
+    }
+</script>
 </body>
 </html>
+
 
 
 
